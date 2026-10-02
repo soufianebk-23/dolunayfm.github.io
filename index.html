@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DolunayFM — en direct</title>
+<meta name="description" content="DolunayFM, la radio de la musique turque, en direct depuis Bruxelles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #241733;
+    --panel: #33224a;
+    --line: #4a3666;
+    --text: #efe8f7;
+    --muted: #a898c0;
+    --lamp: #ffb627;
+    --lamp-glow: rgba(255, 182, 39, .45);
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 400 1.0625rem/1.6 var(--body);
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  }
+  a { color: var(--lamp); }
+  :focus-visible { outline: 3px solid var(--lamp); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 64rem; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Navigation */
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; gap: 1rem; flex-wrap: wrap; }
+  .logo { font: 800 1.25rem var(--display); letter-spacing: -.02em; color: var(--text); text-decoration: none; }
+  nav ul { list-style: none; display: flex; gap: 1.5rem; padding: 0; }
+  nav ul a { color: var(--muted); text-decoration: none; font-weight: 500; }
+  nav ul a:hover { color: var(--text); }
+
+  /* Hero / lecteur */
+  .hero { padding: 3rem 0 5rem; display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+  .onair {
+    display: inline-flex; align-items: center; gap: .6rem;
+    border: 2px solid var(--line); border-radius: 999px; padding: .35rem 1rem .35rem .7rem;
+    font-weight: 600; color: var(--muted); transition: color .3s, border-color .3s;
+  }
+  .onair { color: var(--lamp); border-color: var(--lamp); }
+  .lamp { width: .8rem; height: .8rem; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 12px 3px var(--lamp-glow); }
+  h1 {
+    font: 800 clamp(3rem, 10vw, 6.5rem)/.92 var(--display);
+    letter-spacing: -.045em; margin: 1.25rem 0 1rem;
+  }
+  .tagline { color: var(--muted); max-width: 32rem; font-size: 1.15rem; }
+  .now { margin-top: 2rem; padding-left: 1rem; border-left: 3px solid var(--lamp); }
+  .now small { display: block; color: var(--muted); font-size: .9rem; }
+  .now strong { font: 700 1.3rem var(--display); }
+
+  .deck { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .deck { width: min(100%, 24rem); }
+  .player-box {
+    width: 100%; padding: 1rem; border-radius: 1.25rem;
+    background: var(--panel); box-shadow: 0 0 0 2px var(--line);
+  }
+  .player-box .cstrEmbed a { color: var(--muted); font-size: .85rem; }
+
+  /* Lune */
+  .logo { display: inline-flex; align-items: center; gap: .55rem; }
+  .logo::before {
+    content: ""; width: 1.1rem; height: 1.1rem; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff8e1, #f3dc9b 70%);
+    box-shadow: 0 0 10px 2px rgba(246, 222, 150, .45);
+  }
+  .deck { position: relative; }
+  .moon {
+    position: absolute; z-index: 0; pointer-events: none;
+    width: 17rem; height: 17rem; top: -6.5rem; right: -5rem; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 38%, rgba(196, 170, 110, .45) 0 9%, transparent 10%),
+      radial-gradient(circle at 62% 26%, rgba(196, 170, 110, .35) 0 6%, transparent 7%),
+      radial-gradient(circle at 58% 64%, rgba(196, 170, 110, .4) 0 12%, transparent 13%),
+      radial-gradient(circle at 24% 70%, rgba(196, 170, 110, .3) 0 5%, transparent 6%),
+      radial-gradient(circle at 40% 35%, #fff9e6, #f1d993 75%, #e2c271);
+    box-shadow: 0 0 60px 18px rgba(246, 222, 150, .28), 0 0 160px 50px rgba(246, 222, 150, .12);
+  }
+  .player-box { position: relative; z-index: 1; }
+
+  /* Sections */
+  section { padding: 4rem 0; border-top: 1px solid var(--line); }
+  h2 { font: 700 clamp(2rem, 5vw, 3rem)/1 var(--display); letter-spacing: -.03em; margin-bottom: 1.5rem; }
+
+  .days { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .days button {
+    font: 600 .95rem var(--body); color: var(--muted); background: none;
+    border: 2px solid var(--line); border-radius: 999px; padding: .4rem 1rem; cursor: pointer;
+  }
+  .days button[aria-pressed=true] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .shows { list-style: none; padding: 0; }
+  .shows li { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .shows time { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .shows b { font: 700 1.15rem var(--display); display: block; }
+  .shows p { color: var(--muted); }
+  .shows li.live b::after {
+    content: "En direct"; margin-left: .6rem; font: 600 .75rem var(--body);
+    background: var(--lamp); color: var(--bg); padding: .15rem .5rem; border-radius: 999px; vertical-align: middle;
+  }
+
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .about p + p { margin-top: 1rem; }
+  .contact-list { list-style: none; padding: 0; }
+  .contact-list li { padding: .75rem 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem; }
+  .contact-list span { color: var(--muted); }
+
+  footer { padding: 2rem 0 3rem; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); }
+
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; padding-top: 1.5rem; }
+    .deck { order: -1; margin-top: 4rem; }
+    .moon { width: 11rem; height: 11rem; top: -5rem; right: -2.5rem; }
+    .about { grid-template-columns: 1fr; }
+    .shows li { grid-template-columns: 1fr; gap: .25rem; }
+    nav ul { gap: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body style="overflow-x: hidden">
+<div class="wrap" id="app">
+
+  <nav>
+    <a class="logo" href="#">DolunayFM</a>
+    <ul>
+      <li><a href="#grille">Programmes</a></li>
+      <li><a href="#apropos">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <span class="onair"><span class="lamp"></span>Écoute en direct</span>
+      <h1 id="stationName">DolunayFM</h1>
+      <p class="tagline" id="tagline">La musique turque d'hier et d'aujourd'hui, de Bruxelles à Istanbul, jour et nuit.</p>
+      <div class="now">
+        <small>À l'antenne maintenant</small>
+        <strong id="nowShow">—</strong>
+      </div>
+    </div>
+
+    <div class="deck">
+      <div class="moon" aria-hidden="true"></div>
+      <div class="player-box">
+        <div data-type="newStreamPlayer" data-publicToken="974b394f-1405-448d-96c6-87828ee7894d" data-theme="dark" data-color="ffb627" data-channelId="" data-rendered="false" class="cstrEmbed"><a href="https://www.caster.fm">Shoutcast Hosting</a> <a href="https://www.caster.fm">Stream Hosting</a> <a href="https://www.caster.fm">Radio Server Hosting</a></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="grille">
+    <h2>Grille des programmes</h2>
+    <div class="days" id="days" role="group" aria-label="Choisir un jour"></div>
+    <ul class="shows" id="shows"></ul>
+  </section>
+
+  <section id="apropos">
+    <div class="about">
+      <h2>À propos</h2>
+      <div>
+        <p>Dolunay, ça veut dire « pleine lune » en turc. DolunayFM est une radio web indépendante qui fait vivre la musique turque à Bruxelles : pop, arabesk, türkü, classiques et nouveautés.</p>
+        <p>Tu veux animer une émission, faire une dédicace ou proposer un morceau ? Écris-nous.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <ul class="contact-list">
+      <li>E-mail <a href="mailto:contact@exemple.be">contact@exemple.be</a></li>
+      <li>Instagram <a href="https://instagram.com/" target="_blank" rel="noopener">@dolunayfm</a></li>
+      <li>TikTok <a href="https://tiktok.com/" target="_blank" rel="noopener">@dolunayfm</a></li>
+    </ul>
+  </section>
+
+  <footer>© <span id="year"></span> DolunayFM · Bruxelles</footer>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURATION — c'est la seule partie à modifier
+   ========================================================= */
+const CONFIG = {
+  // Grille : jour (0 = dimanche, 1 = lundi … 6 = samedi), heures "HH:MM"
+  schedule: [
+    { day: [1,2,3,4,5], start: "07:00", end: "10:00", title: "Sabah Keyfi",       desc: "La matinale : de la bonne humeur et les tubes du moment." },
+    { day: [1,2,3,4,5], start: "12:00", end: "14:00", title: "Öğle Arası",        desc: "Pop turque et nouveautés pour la pause de midi." },
+    { day: [1,2,3,4,5], start: "18:00", end: "20:00", title: "Akşam Sohbeti",     desc: "Discussions, invités et dédicaces des auditeurs." },
+    { day: [5,6],       start: "21:00", end: "23:59", title: "Gece Yarısı",       desc: "Arabesk et slows pour la nuit." },
+    { day: [0],         start: "14:00", end: "17:00", title: "Pazar Keyfi",       desc: "Türkü, classiques et souvenirs du dimanche." }
+  ],
+  defaultShow: "Türk müziği non-stop"
+};
+/* ========================================================= */
+
+const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* Grille des programmes */
+const toMin = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+function currentShow() {
+  const now = new Date(), d = now.getDay(), m = now.getHours() * 60 + now.getMinutes();
+  return CONFIG.schedule.find(s => s.day.includes(d) && m >= toMin(s.start) && m < toMin(s.end));
+}
+function renderDay(d) {
+  document.querySelectorAll("#days button").forEach(b => b.setAttribute("aria-pressed", b.dataset.day == d));
+  const live = currentShow();
+  const list = CONFIG.schedule.filter(s => s.day.includes(d)).sort((a, b) => toMin(a.start) - toMin(b.start));
+  document.getElementById("shows").innerHTML = list.length
+    ? list.map(s => `<li class="${s === live && d === new Date().getDay() ? "live" : ""}">
+        <time>${s.start} – ${s.end}</time>
+        <div><b>${s.title}</b><p>${s.desc}</p></div></li>`).join("")
+    : `<li><time>Toute la journée</time><div><b>${CONFIG.defaultShow}</b><p>Pas d'émission ce jour-là, la playlist tourne en continu.</p></div></li>`;
+}
+[1,2,3,4,5,6,0].forEach(d => {
+  const b = document.createElement("button");
+  b.textContent = dayNames[d]; b.dataset.day = d;
+  b.addEventListener("click", () => renderDay(d));
+  document.getElementById("days").appendChild(b);
+});
+function refreshNow() {
+  const s = currentShow();
+  document.getElementById("nowShow").textContent = s ? s.title : CONFIG.defaultShow;
+}
+renderDay(new Date().getDay());
+refreshNow();
+setInterval(refreshNow, 60000);
+</script>
+<script src="https://cdn.cloud.caster.fm/widgets/embed.js"></script>
+</body>
+</html>
